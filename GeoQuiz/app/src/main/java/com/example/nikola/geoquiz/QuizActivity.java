@@ -1,10 +1,8 @@
 package com.example.nikola.geoquiz;
 
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,21 +10,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class QuizActivity extends AppCompatActivity {
 
     private static final String KEY_ANSWERED_QUESTIONS = "AnsweredQuestions";
     private Button mTrueButton;
     private Button mFalseButton;
-    private ImageButton mPrevButton;
-    private ImageButton mNextButton;
     private TextView mQuestionTextView;
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
 
-    private static Question[] sQuestionBank = new Question[] {
+    private static final Question[] sQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
             new Question(R.string.question_oceans, true),
             new Question(R.string.question_mideast, false),
@@ -87,8 +82,8 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
         setupAnswerButtons();
 
-        mPrevButton = findViewById(R.id.prev_button);
-        mPrevButton.setOnClickListener(new View.OnClickListener() {
+        ImageButton prevButton = findViewById(R.id.prev_button);
+        prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mCurrentIndex = mCurrentIndex == 0 ? mCurrentIndex = sQuestionBank.length - 1 : (mCurrentIndex - 1) % sQuestionBank.length;
@@ -97,8 +92,8 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        mNextButton = findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
+        ImageButton nextButton = findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % sQuestionBank.length;
