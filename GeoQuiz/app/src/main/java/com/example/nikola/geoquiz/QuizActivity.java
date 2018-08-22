@@ -17,6 +17,8 @@ import java.util.HashSet;
 public class QuizActivity extends AppCompatActivity {
 
     private static final String KEY_ANSWERED_QUESTIONS = "AnsweredQuestions";
+    private static final String KEY_IS_CHEATER = "IsCheater";
+    private static final String KEY_REMAINING_CHEATS = "RemainingCheats";
     private Button mTrueButton;
     private Button mFalseButton;
     private TextView mQuestionTextView;
@@ -42,6 +44,9 @@ public class QuizActivity extends AppCompatActivity {
     private int mCorrectlyAnswered = 0;
     private boolean mIsCheater = false;
 
+    private int mRemainingCheatCount = 3;
+    private TextView mCheatCountTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +60,13 @@ public class QuizActivity extends AppCompatActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             mAnsweredQuestions = (HashSet<Integer>)savedInstanceState.getSerializable(KEY_ANSWERED_QUESTIONS);
             mAnsweredQuestions  = mAnsweredQuestions == null ? new HashSet<Integer>() : mAnsweredQuestions;
+            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER);
+            mRemainingCheatCount = savedInstanceState.getInt(KEY_REMAINING_CHEATS);
         }
 
+        mCheatCountTextView = findViewById(R.id.cheat_count_text_view);
+        mCheatCountTextView.setText(Integer.toString(mRemainingCheatCount));
+        
         mCheatButton = findViewById(R.id.cheat_button);
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +199,8 @@ public class QuizActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState");
         outState.putInt(KEY_INDEX, mCurrentIndex);
         outState.putSerializable(KEY_ANSWERED_QUESTIONS, mAnsweredQuestions);
+        outState.putBoolean(KEY_IS_CHEATER, mIsCheater);
+        outState.putInt(KEY_REMAINING_CHEATS, mRemainingCheatCount);
     }
 
     private void setupAnswerButtons()
@@ -208,7 +220,17 @@ public class QuizActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            mIsCheater = CheatActivity.wasAnswerShown(data);
+            boolean wasAnswerShown = CheatActivity.wasAnswerShown(data);
+            mIsCheater = mIsCheater || wasAnswerShown;
+            if (wasAnswerShown)
+            {
+                mRemainingCheatCount--;
+                mCheatCountTextView.setText(Integer.toString(mRemainingCheatCount));
+            }
+            if (mRemainingCheatCount <= 0)
+            {
+                mCheatButton.setEnabled(false);
+            }
         }
     }
 }
