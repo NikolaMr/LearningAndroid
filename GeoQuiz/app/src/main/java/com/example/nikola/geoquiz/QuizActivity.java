@@ -1,5 +1,8 @@
 package com.example.nikola.geoquiz;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +20,11 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private TextView mQuestionTextView;
+    private Button mCheatButton;
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private static final Question[] sQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -35,6 +40,7 @@ public class QuizActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
 
     private int mCorrectlyAnswered = 0;
+    private boolean mIsCheater = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,16 @@ public class QuizActivity extends AppCompatActivity {
             mAnsweredQuestions = (HashSet<Integer>)savedInstanceState.getSerializable(KEY_ANSWERED_QUESTIONS);
             mAnsweredQuestions  = mAnsweredQuestions == null ? new HashSet<Integer>() : mAnsweredQuestions;
         }
+
+        mCheatButton = findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isAnswerTrue = sQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, isAnswerTrue);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
+            }
+        });
 
         mTrueButton = findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
@@ -144,12 +160,17 @@ public class QuizActivity extends AppCompatActivity {
 
         int messageResId;
 
-        if (userPressedTrue == answerIsTrue)
+        if (mIsCheater)
         {
-            messageResId = R.string.correct_toast;
-            mCorrectlyAnswered++;
+            messageResId = R.string.judgement_toast;
         } else {
-          messageResId = R.string.incorrect_toast;
+
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct_toast;
+                mCorrectlyAnswered++;
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
         }
 
         mAnsweredQuestions.add(mCurrentIndex);
@@ -177,4 +198,17 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setEnabled(!shouldDisable);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null) {
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
+    }
 }
