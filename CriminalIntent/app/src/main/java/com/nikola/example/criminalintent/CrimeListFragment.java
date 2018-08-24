@@ -1,15 +1,19 @@
 package com.nikola.example.criminalintent;
 
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,8 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+
+    private int mHolderChangedIndex = -1;
 
     @Nullable
     @Override
@@ -41,8 +47,22 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
+//        if (mAdapter == null) {
+//            mAdapter = new CrimeAdapter(crimes);
+//            mCrimeRecyclerView.setAdapter(mAdapter);
+//        } else {
+//            mAdapter.notifyDataSetChanged();
+//        }
         mAdapter = new CrimeAdapter(crimes);
         mCrimeRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mHolderChangedIndex != -1) {
+            CrimeListFragment.this.mAdapter.notifyItemChanged(mHolderChangedIndex);
+        }
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder
@@ -51,6 +71,7 @@ public class CrimeListFragment extends Fragment {
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private Crime mCrime;
+        private ImageView mSolvedImageView;
 
         //public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
         public CrimeHolder(View view) {
@@ -61,19 +82,23 @@ public class CrimeListFragment extends Fragment {
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
         }
 
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(crime.getTitle());
-            mDateTextView.setText(crime.getDate().toString());
+            DateFormat dateFormat = new DateFormat();
+            String dateString = dateFormat.format("yyyy-MM-dd", crime.getDate()).toString();
+            mDateTextView.setText(dateString);
+            mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(),
-                    mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
+            mHolderChangedIndex = getAdapterPosition();
         }
     }
 
