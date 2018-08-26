@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +26,9 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
+
+    private Button mButtonFirst;
+    private Button mButtonLast;
 
     public static Intent newIntent(Context context, UUID crimeId) {
         Intent intent = new Intent(context, CrimePagerActivity.class);
@@ -41,6 +46,42 @@ public class CrimePagerActivity extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.crime_view_pager);
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mButtonFirst.setEnabled(position > 0);
+                mButtonLast.setEnabled(position < mCrimes.size() - 1);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mButtonFirst = (Button) findViewById(R.id.first_button);
+
+        mButtonFirst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(0);
+            }
+        });
+
+        mButtonLast = (Button) findViewById(R.id.last_button);
+
+        mButtonLast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(mCrimes.size()-1);
+            }
+        });
+
         mCrimes = CrimeLab.get(this).getCrimes();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -56,5 +97,18 @@ public class CrimePagerActivity extends AppCompatActivity {
                 return mCrimes.size();
             }
         });
+
+        for (int i = 0; i < mCrimes.size(); ++i) {
+            if (mCrimes.get(i).getId().equals(crimeId)) {
+                if (i == 0) {
+                    mButtonFirst.setEnabled(false);
+                }
+                if (i == mCrimes.size() - 1) {
+                    mButtonLast.setEnabled(false);
+                }
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
     }
 }

@@ -4,6 +4,6 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.nikola.example.criminalintent.CrimeActivity">
+    tools:context="com.nikola.example.criminalintent.CrimePagerActivity">
 
 </FrameLayout>

@@ -47,22 +47,23 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
-//        if (mAdapter == null) {
-//            mAdapter = new CrimeAdapter(crimes);
-//            mCrimeRecyclerView.setAdapter(mAdapter);
-//        } else {
-//            mAdapter.notifyDataSetChanged();
-//        }
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+//        mAdapter = new CrimeAdapter(crimes);
+//        mCrimeRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mHolderChangedIndex != -1) {
-            CrimeListFragment.this.mAdapter.notifyItemChanged(mHolderChangedIndex);
-        }
+//        if (mHolderChangedIndex != -1) {
+//            CrimeListFragment.this.mAdapter.notifyItemChanged(mHolderChangedIndex);
+//        }
+        updateUI();
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder
