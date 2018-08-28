@@ -133,7 +133,7 @@ public class CrimeFragment extends Fragment {
 
             Date date = mCrime.getDate();
 
-            
+
 
             updateDate();
         }
