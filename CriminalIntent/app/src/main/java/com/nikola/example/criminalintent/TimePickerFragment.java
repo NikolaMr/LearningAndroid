@@ -13,9 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by Nikola on 28-Aug-18.
  */

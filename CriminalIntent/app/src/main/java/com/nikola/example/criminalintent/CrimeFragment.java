@@ -18,7 +18,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import static android.widget.CompoundButton.*;
@@ -33,10 +35,12 @@ public class CrimeFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
 
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -85,6 +89,8 @@ public class CrimeFragment extends Fragment {
 
         mDateButton = (Button) v.findViewById(R.id.crime_date);
 
+        mTimeButton = (Button) v.findViewById(R.id.crime_time);
+
         updateDate();
 
         mDateButton.setOnClickListener(new OnClickListener() {
@@ -93,6 +99,24 @@ public class CrimeFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dialog.show(manager, DIALOG_DATE);
+            }
+        });
+
+        mTimeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+
+                Date date = mCrime.getDate();   // given date
+                Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+                calendar.setTime(date);   // assigns calendar to given date
+
+                int hour = calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
+                int minute = calendar.get(Calendar.HOUR);        // gets hour in 12h format
+
+                TimePickerFragment dialog = TimePickerFragment.newInstance(hour, minute);
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
                 dialog.show(manager, DIALOG_DATE);
             }
         });
@@ -113,6 +137,9 @@ public class CrimeFragment extends Fragment {
         DateFormat dateFormat = new DateFormat();
         String dateString = dateFormat.format("E, yyyy-MM-dd", mCrime.getDate()).toString();
         mDateButton.setText(dateString);
+
+        String timeString = dateFormat.format("hh:mm", mCrime.getDate()).toString();
+        mTimeButton.setText(timeString);
     }
 
     @Override
@@ -133,7 +160,13 @@ public class CrimeFragment extends Fragment {
 
             Date date = mCrime.getDate();
 
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
 
+            c.set(Calendar.HOUR, hour);
+            c.set(Calendar.MINUTE, minute);
+
+            mCrime.setDate(c.getTime());
 
             updateDate();
         }
