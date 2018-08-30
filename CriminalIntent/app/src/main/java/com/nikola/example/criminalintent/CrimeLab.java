@@ -26,18 +26,11 @@ public class CrimeLab {
 
     private CrimeLab(Context context) {
         mCrimes = new ArrayList<>();
+    }
 
-        Random r = new Random();
-
-        for (int i = 0; i < 100; ++i)
-        {
-            Crime crime = new Crime();
-            crime.setTitle("Crime #" + i);
-            crime.setSolved(r.nextBoolean());
-            crime.setRequiresPolice(r.nextBoolean());
-            mCrimes.add(crime);
-            mCrimeMap.put(crime.getId(), crime);
-        }
+    public void addCrime(Crime c) {
+        mCrimes.add(c);
+        mCrimeMap.put(c.getId(), c);
     }
 
     public List<Crime> getCrimes() {
@@ -47,5 +40,11 @@ public class CrimeLab {
     public Crime getCrime(UUID id)
     {
         return mCrimeMap.get(id);
+    }
+
+    public void removeCrime(UUID id) {
+        Crime c = getCrime(id);
+        mCrimeMap.remove(id);
+        mCrimes.remove(c);
     }
 }
