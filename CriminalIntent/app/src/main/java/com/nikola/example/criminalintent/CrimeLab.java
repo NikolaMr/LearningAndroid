@@ -10,6 +10,7 @@ import com.nikola.example.criminalintent.database.CrimeCursorWrapper;
 import com.nikola.example.criminalintent.database.CrimeDbSchema;
 import com.nikola.example.criminalintent.database.CrimeDbSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,11 @@ public class CrimeLab {
         } finally {
             cursorWrapper.close();
         }
+    }
+
+    public File getPhotoFile(Crime crime) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir,  crime.getPhotoFilename());
     }
 
     public void removeCrime(UUID id) {

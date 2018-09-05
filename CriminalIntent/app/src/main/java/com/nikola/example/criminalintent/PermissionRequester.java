@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
 /**
@@ -39,4 +40,25 @@ public class PermissionRequester {
         }
     }
 
+    static void requestPermission(Fragment fragment, String permission) {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(fragment.getActivity(),
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(fragment.getActivity(),
+                    permission)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                requestPermission(fragment, permission);
+            }
+        } else {
+            // Permission has already been granted
+        }
+    }
 }
