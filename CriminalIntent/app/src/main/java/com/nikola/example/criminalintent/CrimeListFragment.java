@@ -201,8 +201,7 @@ public class CrimeListFragment extends Fragment {
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(crime.getTitle());
-            DateFormat dateFormat = new DateFormat();
-            String dateString = dateFormat.format("yyyy-MM-dd", crime.getDate()).toString();
+            String dateString = DateFormat.getDateFormat(getActivity()).format(mCrime.getDate()).toString();
             mDateTextView.setText(dateString);
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }

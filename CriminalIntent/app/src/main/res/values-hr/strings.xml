@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KriminalnaNamjera</string>
+    <string name="crime_title_hint">Unesi ime zločina.</string>
+    <string name="crime_title_label">Naslov</string>
+    <string name="crime_details_label">Detalji</string>
+    <string name="crime_solved_label">Riješen</string>
+    <string name="crime_date">Datum zločina</string>
+    <string name="crime_title">Naslov zločina</string>
+    <string name="contact_police">Kontaktiraj policiju!</string>
+    <string name="date_picker_title">Datum zločina:</string>
+    <string name="new_crime">Novi zločin</string>
+    <string name="delete_crime">Obriši zločin</string>
+    <string name="show_subtitle">Prikaži dopune</string>
+    <string name="hide_subtitle">Sakrij dopune</string>
+    <plurals name="subtitle_plural">
+        <item quantity="one">%1$d zločin</item>
+        <item quantity="other">%1$d zločina</item>
+        <item quantity="few">%1$d zločina</item>
+    </plurals>
+    <string name="crime_suspect_text">Odaberi osumnjičenika</string>
+    <string name="crime_report_text">Pošalji izvješće o zločinu</string>
+    <string name="crime_report">%1$s!
+        Zločin je otkriven %2$s. %3$s, and %4$s
+    </string>
+    <string name="crime_report_solved">Slučaj je riješen</string>
+    <string name="crime_report_unsolved">Slučaj nije riješen</string>
+    <string name="crime_report_no_suspect">nema osumnjičenika</string>
+    <string name="crime_report_suspect">osumnjičenik je %s.</string>
+    <string name="crime_report_subject">KriminalnaNamjera izvješće o zločinu</string>
+    <string name="send_report">Pošalji izvješće o zločinu putem</string>
+    <string name="crime_contact_suspect">Kontaktiraj osumnjičenika</string>
+</resources>

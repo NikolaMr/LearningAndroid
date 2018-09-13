@@ -339,11 +339,10 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        DateFormat dateFormat = new DateFormat();
-        String dateString = dateFormat.format("E, yyyy-MM-dd", mCrime.getDate()).toString();
+        String dateString = DateFormat.getDateFormat(getActivity()).format(mCrime.getDate()).toString();
         mDateButton.setText(dateString);
 
-        String timeString = dateFormat.format("hh:mm", mCrime.getDate()).toString();
+        String timeString = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate()).toString();
         mTimeButton.setText(timeString);
 
         updateCrime();
@@ -357,9 +356,7 @@ public class CrimeFragment extends Fragment {
             solvedString = getString(R.string.crime_report_unsolved);
         }
 
-        String dateFormat = "EEE, MMM, dd";
-        String dateString = DateFormat.format(dateFormat,
-                mCrime.getDate()).toString();
+        String dateString = DateFormat.getDateFormat(getActivity()).format(mCrime.getDate()).toString();
 
         String suspect = mCrime.getSuspect();
         if (suspect == null) {
