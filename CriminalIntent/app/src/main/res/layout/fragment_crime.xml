@@ -13,13 +13,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView
+                android:contentDescription="@string/crime_photo_no_image_description"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/crime_photo"
                 android:scaleType="centerInside"
                 android:cropToPadding="true"
+                android:focusable="true"
                 android:background="@android:color/darker_gray"/>
             <ImageButton
+                android:contentDescription="@string/crime_photo_button_description"
                 android:id="@+id/crime_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/crime_title_label"
+                android:labelFor="@+id/crime_title"
                 />
 
             <EditText
