@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -101,15 +103,6 @@ public class LocatrFragment extends Fragment {
 
         MenuItem searchItem = menu.findItem(R.id.action_locate);
         searchItem.setEnabled(mClient.isConnected());
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                ProgressDialog.Builder builder = new ProgressDialog.Builder(getActivity());
-                builder.setTitle("Waiting for image...");
-                builder.show();
-                return true;
-            }
-        });
     }
 
     private void findImage() {
@@ -210,6 +203,7 @@ public class LocatrFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Location... locations) {
+            startProgressDialog();
             FlickrFetchr fetchr = new FlickrFetchr();
             List<GalleryItem> items = fetchr.searchPhotos(locations[0]);
 
@@ -232,6 +226,19 @@ public class LocatrFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             mImageView.setImageBitmap(mBitmap);
+            endProgressDialog();
+        }
+
+        private AlertDialog dialog;
+
+        private void startProgressDialog() {
+            ProgressDialog.Builder builder = new ProgressDialog.Builder(getActivity());
+            builder.setTitle("Searching");
+            dialog = builder.show();
+        }
+
+        private void endProgressDialog() {
+            dialog.dismiss();
         }
     }
 }
